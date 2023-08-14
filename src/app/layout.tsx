@@ -1,3 +1,4 @@
+import MuiTheme from '@/components/MuiTheme'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -15,8 +16,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+      <html lang="pt-BR">
+        <body className={inter.className}>
+          <div className='h-full min-h-screen bg-slate-900 flex flex-col items-center'>
+            <MuiTheme>
+              {children}
+            </MuiTheme>
+          </div>
+        </body>
+      </html>
   )
 }

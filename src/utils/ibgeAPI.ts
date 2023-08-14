@@ -12,6 +12,18 @@ export type dataReturn = {
   name: string
 }
 
+export const dataInfo = {
+  'Ovos': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/915/periodos/201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301/variaveis/29'},
+  'Expectativa de Vida': {type: 'Dados Demográficos', link: ''},
+  'População residente estimada': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/2001|2002|2003|2004|2005|2006|2008|2009|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021/variaveis/9324'},
+  'PIB': {type: 'Dados Econômicos', link: ''},
+}
+
+export const dataLocation = {
+  'Santa Catarina': 'N3[42]',
+  'Brusque': 'N6[4202909]',
+}
+
 const getInfoByear = (data: object, years: string[]) => {
   return years.map((year) => ({
     value: data.resultados[0].series[0].serie[year],
@@ -19,7 +31,14 @@ const getInfoByear = (data: object, years: string[]) => {
   }));
 }
 
-export const getDadoIbgeByFullURL = async (url: string): dataReturn => {
+export const getDadoIbgeByFullURL = async (url: string, location: string): dataReturn => {
+  //https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/2001|2002|2003|2004|2005|2006|2008|2009|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021/variaveis/9324?localidades=N6[4202909]
+
+  console.log(location)
+  console.log(dataLocation[location])
+  url += "?localidades=" + dataLocation[location]
+  console.log(url)
+  
   try {
     const response = await axios.get(url);
     const start = url.indexOf("periodos/") + "periodos/".length;

@@ -25,7 +25,6 @@ interface MuiThemeprops {
   children: ReactNode
 }
 
-
 const MuiTheme = ({ children }: MuiThemeprops) => {
   return (
     <ThemeProvider theme={theme}>{children}</ThemeProvider>

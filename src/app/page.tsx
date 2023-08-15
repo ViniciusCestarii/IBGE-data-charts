@@ -1,7 +1,7 @@
 'use client'
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode, SyntheticEvent } from 'react';
 import { getDadoIbgeByFullURL, dataReturn, createOptions, createChartData, dataInfo, getAllLocalities } from '../utils/ibgeAPI';
-import { Bar, Doughnut, Line, PolarArea, Scatter } from 'react-chartjs-2';
+import { Bar, Line, PolarArea, Scatter } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Title, Tooltip, Legend, RadialLinearScale, ArcElement } from 'chart.js';
 import { Autocomplete, CircularProgress, Popper, TextField, useTheme } from '@mui/material';
 import { CalendarBlank, Magnify, MagnifyRemoveOutline, CursorDefaultOutline, AccountMultipleOutline, Cow, CurrencyUsd, MathCompass } from 'mdi-material-ui';
@@ -9,8 +9,12 @@ import ListboxComponent from '@/components/Listbox';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
 
+interface LocationOptions {
+  [key: string]: string;
+}
+
 const getDadoTypeIcon = (type: string) => {
-  switch(type){
+  switch (type) {
     case 'Dados Agropecuário':
       return <Cow className='text-xl mr-2' />
     case 'Dados Demográficos':
@@ -21,39 +25,43 @@ const getDadoTypeIcon = (type: string) => {
   }
 }
 
-const getRegiaoByLevel = (level: number) : string => {
-  switch(level){
+const getRegiaoByLevel = (level: number): string => {
+  switch (level) {
     case 1:
       return 'País'
     case 3:
       return 'Estados'
     case 6:
       return 'Cidades'
-    default: 'Outras Localidades'
   }
+  return 'Outras Localidades'
 }
 
 function IBGEDataPage() {
   const theme = useTheme();
   const [data, setData] = useState<dataReturn | null | undefined>();
   const [dataOption, setDataOption] = useState<string>(Object.keys(dataInfo)[0]);
-  const [locationOptions, setLocationOptions] = useState<object>({});
+  const [locationOptions, setLocationOptions] = useState<LocationOptions>({});
   const [location, setLocation] = useState<string>("Brasil")
 
-  const handleChangeLocation = (event: React.ChangeEvent<{ value: unknown }>, newValue: string) => {
-    setLocation(newValue)
-    setData(undefined)
-  }
+  const handleChangeLocation = (event: React.SyntheticEvent<Element, Event>, newValue: string | null) => {
+    if (newValue !== null) {
+      setLocation(newValue);
+      setData(undefined);
+    }
+  };
 
-  const handleChangeDataOption = (event: React.ChangeEvent<{ value: unknown }>, newValue: string) => {
-    setDataOption(newValue)
-    setData(undefined)
-  }
+  const handleChangeDataOption = (event: React.SyntheticEvent<Element, Event>, newValue: string | null) => {
+    if (newValue !== null) {
+      setDataOption(newValue);
+      setData(undefined);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      if(Object.keys(locationOptions).length > 0) {
-      setData(await getDadoIbgeByFullURL(dataInfo[dataOption].link, location, locationOptions));
+      if (Object.keys(locationOptions).length > 0) {
+        setData(await getDadoIbgeByFullURL(dataInfo[dataOption].link, location, locationOptions));
       }
     }
     if (dataOption) {
@@ -73,23 +81,23 @@ function IBGEDataPage() {
     <div className='h-full flex flex-col items-center w-full px-3'>
       <h1 className='text-4xl text-white font-bold my-3 text-center'>Dados do IBGE</h1>
       <div className='flex flex-col space-y-2 w-full items-center justify-center sm:flex-row sm:space-x-4 sm:space-y-0 pb-2'>
-      <Autocomplete
-              PopperComponent={(props) => (
-                <Popper
-                  {...props}
-                  sx={{
-                    '& .MuiAutocomplete-listbox::-webkit-scrollbar': {
-                      width: '8px',
-                    },
-                    '& .MuiAutocomplete-listbox::-webkit-scrollbar-thumb': {
-                      backgroundColor: theme.palette.primary.light,
-                      borderRadius: '2px',
-                    },
-                    '& .MuiAutocomplete-listbox::-webkit-scrollbar-track': {
-                      backgroundColor: 'rgba(60, 60, 80)',
-                    },
-                  }}
-                />)}
+        <Autocomplete
+          PopperComponent={(props) => (
+            <Popper
+              {...props}
+              sx={{
+                '& .MuiAutocomplete-listbox::-webkit-scrollbar': {
+                  width: '8px',
+                },
+                '& .MuiAutocomplete-listbox::-webkit-scrollbar-thumb': {
+                  backgroundColor: theme.palette.primary.light,
+                  borderRadius: '2px',
+                },
+                '& .MuiAutocomplete-listbox::-webkit-scrollbar-track': {
+                  backgroundColor: 'rgba(60, 60, 80)',
+                },
+              }}
+            />)}
           disablePortal
           ListboxComponent={ListboxComponent}
           disableListWrap
@@ -107,40 +115,39 @@ function IBGEDataPage() {
             maxWidth: 340,
           }}
           renderInput={(params) => <TextField {...params} label="Localização"
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {Object.keys(locationOptions).length === 0 ? <CircularProgress color="inherit" size={20} /> : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-          }} />}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {Object.keys(locationOptions).length === 0 ? <CircularProgress color="inherit" size={20} /> : null}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            }} />}
         />
         <Autocomplete
-        PopperComponent={(props) => (
-          <Popper
-            {...props}
-            sx={{
-              '& .MuiAutocomplete-listbox::-webkit-scrollbar': {
-                width: '8px',
-              },
-              '& .MuiAutocomplete-listbox::-webkit-scrollbar-thumb': {
-                backgroundColor: theme.palette.primary.light,
-                borderRadius: '4px',
-              },
-              '& .MuiAutocomplete-listbox::-webkit-scrollbar-track': {
-                backgroundColor: 'rgba(60, 60, 80)',
-              },
-            }}
-          />)}
+          PopperComponent={(props) => (
+            <Popper
+              {...props}
+              sx={{
+                '& .MuiAutocomplete-listbox::-webkit-scrollbar': {
+                  width: '8px',
+                },
+                '& .MuiAutocomplete-listbox::-webkit-scrollbar-thumb': {
+                  backgroundColor: theme.palette.primary.light,
+                  borderRadius: '4px',
+                },
+                '& .MuiAutocomplete-listbox::-webkit-scrollbar-track': {
+                  backgroundColor: 'rgba(60, 60, 80)',
+                },
+              }}
+            />)}
           renderGroup={(params) => {
-            console.log(params);
-            return(
-            <li key={params.key}>
-              <div className='sticky -top-2 py-2 px-10 font-semibold flex items-center' style={{backgroundColor: 'rgba(60, 60, 80)'}}>{getDadoTypeIcon(params.group)} {params.group}</div>
-              <ul>{params.children}</ul>
-            </li>)
+            return (
+              <li key={params.key}>
+                <div className='sticky -top-2 py-2 px-10 font-semibold flex items-center' style={{ backgroundColor: 'rgba(60, 60, 80)' }}>{getDadoTypeIcon(params.group)} {params.group}</div>
+                <ul>{params.children}</ul>
+              </li>)
           }}
           disablePortal
           value={dataOption}
@@ -154,7 +161,7 @@ function IBGEDataPage() {
           renderInput={(params) => <TextField {...params} label="Dados" />}
         />
       </div>
-      {data && (
+      {data && data && data.data[0].value !== "..." && (
         <>
           <div className='w-full flex flex-col text-xs sm:text-sm pt-3 sm:pt-0 max-w-screen-xl sm:-mb-8'>
             <p><CalendarBlank className='text-lg sm:text-xl' /> Dados de <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{data.data[0].name}</span> até <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{data.data[data.data.length - 1].name}</span></p>
@@ -171,7 +178,7 @@ function IBGEDataPage() {
             <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center'>
               <PolarArea data={createChartData(data)} options={createOptions(data)} />
             </div>
-            <div className='flex justify-center items-center col-span-1 sm:col-span-2 lg:col-span-2'>
+            <div className='flex justify-center items-center col-span-1 lg:col-span-2'>
               <Bar data={createChartData(data)} options={createOptions(data, true, true)} />
             </div>
           </div>
@@ -187,9 +194,9 @@ function IBGEDataPage() {
         </div>
       )}
 
-      {data === null && (
+      {(data === null || data && data.data[0].value === "...") && (
         <div className='h-[50vh] sm:h-[80vh] items-center justify-center flex flex-col space-y-4 text-center'>
-          <p>{location === "" || location === null  ? "Selecione uma localidade primeiro." : `Não foi encontrado esses dados do IBGE em ${location}`}</p>
+          <p>{location === "" || location === null ? "Selecione uma localidade primeiro." : `Não foi encontrado esses dados do IBGE em ${location}`}</p>
           <MagnifyRemoveOutline className='text-3xl' />
         </div>
       )}

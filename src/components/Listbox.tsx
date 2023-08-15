@@ -9,7 +9,7 @@ import { CityVariantOutline, Earth, HomeGroup } from 'mdi-material-ui';
 const LISTBOX_PADDING = 8; // px
 
 const getLocalityTypeIcon = (locality: string) => {
-  switch(locality){
+  switch (locality) {
     case 'País':
       return <Earth className='text-xl mr-2' />
     case 'Estados':
@@ -29,8 +29,8 @@ function renderRow(props: ListChildComponentProps) {
   };
   if (dataSet.hasOwnProperty('group')) {
     return (
-      <ListSubheader key={dataSet.key} component="div" className='px-10 font-semibold flex items-center'  style={{...inlineStyle, color:"white", backgroundColor: 'rgba(60, 60, 80)'}}>
-        {getLocalityTypeIcon(dataSet.group) }{dataSet.group}
+      <ListSubheader key={dataSet.key} component="div" className='px-10 font-semibold flex items-center' style={{ ...inlineStyle, color: "white", backgroundColor: 'rgba(60, 60, 80)' }}>
+        {getLocalityTypeIcon(dataSet.group)}{dataSet.group}
       </ListSubheader>
     );
   }
@@ -48,6 +48,8 @@ const OuterElementType = React.forwardRef<HTMLDivElement>((props, ref) => {
   const outerProps = React.useContext(OuterElementContext);
   return <div ref={ref} {...props} {...outerProps} />;
 });
+
+OuterElementType.displayName = 'OuterElementType';
 
 function useResetCache(data: any) {
   const ref = React.useRef<VariableSizeList>(null);

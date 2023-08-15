@@ -33,9 +33,14 @@ export const dataInfo: {
   'Produção de Tomate': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4899]' },
   'Área dos estabelecimentos agropecuários utilizada para pastagem': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118269]' },
   'Área dos estabelecimentos agropecuários utilizada para lavouras': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118268]' },
-  'Número de população total': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades=' },
-  'Número de população com 80 anos ou mais': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades=&classificacao=58[2503]' },
-  'População residente estimada': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/2001|2002|2003|2004|2005|2006|2008|2009|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021/variaveis/9324?localidades=' },
+  'Número total de brasileiros natos': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades=' },
+  'Número de brasileiros natos com 80 anos ou mais': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades=&classificacao=58[2503]' },
+  'População residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/93?localidades=&classificacao=86[0]|133[0]'},
+  'População residente estimada': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/2001|2002|2003|2004|2005|2006|2008|2009|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021/variaveis/9324?localidades='},
+  'População católica apostólica romana residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/93?localidades=&classificacao=86[0]|133[95263]'},
+  'Porcentagem da população católica apostólica romana residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/1000093?localidades=&classificacao=86[0]|133[95263]'},
+  'População evangélica residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/93?localidades=&classificacao=86[0]|133[95277]'},
+  'Porcentagem da população evangélica residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/1000093?localidades=&classificacao=86[0]|133[95277]'},
   'PIB': { type: 'Dados Econômicos', link: '' },
 }
 
@@ -149,7 +154,7 @@ type ChartOptions = {
     line: {
       tension: number;
       borderWidth: number;
-      borderColor: string; // Fixed typo ("borerColor" to "borderColor")
+      borderColor: string;
       fill: string;
       backgroundColor: string;
     };

@@ -95,11 +95,12 @@ export const getDadoIbgeByFullURL = async (url: string, location: string, locati
 }
 
 export const createChartData = (data: dataReturn, axis?: boolean) => {
+  console.log(data.data.map((item) => item.name))
   const chartData = {
     labels: data.data.map((item) => item.name),
     datasets: [
       {
-        data: axis ? data.data.map((item, index) => {return { x: index + 1, y: item.value  }}) : data.data.map((item) => item.value),
+        data: axis ? data.data.map((item, index) => {return { x: parseInt(item.name.substring(0, 5)), y: item.value  }}) : data.data.map((item) => item.value),
         pointBorderColor: "rgba(150, 150, 200, 0.7)",
         pointBackgroundColor: "rgba(150, 150, 200, 0.7)",
         ticks: {

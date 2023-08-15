@@ -1,10 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { getDadoIbgeByFullURL, dataReturn, createOptions, createChartData, dataInfo, getAllLocalities } from '../utils/ibgeAPI';
 import { Bar, Doughnut, Line, PolarArea, Scatter } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Title, Tooltip, Legend, RadialLinearScale, ArcElement } from 'chart.js';
 import { Autocomplete, CircularProgress, TextField, useTheme } from '@mui/material';
 import { CalendarBlank, Magnify, MagnifyRemoveOutline, CursorDefaultOutline, AccountMultipleOutline, Cow, CurrencyUsd, MathCompass } from 'mdi-material-ui';
+import ListboxComponent from '@/components/Listbox';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
 
@@ -69,28 +70,23 @@ function IBGEDataPage() {
     fetchData()
   }, [])
 
-  console.log(locationOptions)
-
   return (
     <div className='h-full flex flex-col items-center w-full px-3'>
       <h1 className='text-4xl text-white font-bold my-3 text-center'>Dados do IBGE</h1>
       <div className='flex flex-col space-y-2 w-full items-center justify-center sm:flex-row sm:space-x-4 sm:space-y-0 pb-2'>
       <Autocomplete
-        disableListWrap
-          renderGroup={(params) => {
-            console.log(params);
-            return(
-            <li key={params.key}>
-              <div className='sticky -top-2 py-2 px-10 font-semibold flex items-center' style={{backgroundColor: 'rgba(60, 60, 80)'}}>{getDadoTypeIcon(params.group)} {params.group}</div>
-              <ul>{params.children}</ul>
-            </li>)
-          }}
           disablePortal
+          ListboxComponent={ListboxComponent}
+          disableListWrap
           value={location}
           onChange={handleChangeLocation}
           loading={Object.keys(locationOptions).length === 0}
           groupBy={(option) => getRegiaoByLevel(parseInt(locationOptions[option].substring(1, 3)))}
+          renderGroup={(params) => params as unknown as ReactNode}
           options={Object.keys(locationOptions)}
+          renderOption={(props, option, state) =>
+            [props, option, state.index] as React.ReactNode
+          }
           sx={{
             width: { xs: "100%", md: 340 },
             maxWidth: 340,
@@ -139,16 +135,13 @@ function IBGEDataPage() {
               <Line data={createChartData(data)} options={createOptions(data, true, true)} />
             </div>
             <div className='flex justify-center items-center'>
-              <Bar data={createChartData(data)} options={createOptions(data, true, true)} />
+              <Scatter data={createChartData(data, true)} options={createOptions(data, true, true)} />
             </div>
             <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center'>
               <PolarArea data={createChartData(data)} options={createOptions(data)} />
             </div>
-            <div className='flex justify-center items-center'>
-              <Doughnut data={createChartData(data)} options={createOptions(data)} />
-            </div>
-            <div className='flex justify-center items-center col-span-1 sm:col-span-2 lg:col-span-1'>
-              <Scatter data={createChartData(data, true)} options={createOptions(data, true)} />
+            <div className='flex justify-center items-center col-span-1 sm:col-span-2 lg:col-span-2'>
+              <Bar data={createChartData(data)} options={createOptions(data, true, true)} />
             </div>
           </div>
           <div className='p-3 lg:p-0'>

@@ -1,92 +1,159 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { getDadoIbgeByFullURL, dataReturn, createOptions, createChartData, dataInfo, dataLocation } from '../utils/ibgeAPI';
+import { getDadoIbgeByFullURL, dataReturn, createOptions, createChartData, dataInfo, getAllLocalities } from '../utils/ibgeAPI';
 import { Bar, Doughnut, Line, PolarArea, Scatter } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Title, Tooltip, Legend, RadialLinearScale, ArcElement } from 'chart.js';
-import { Autocomplete, CircularProgress, Select, TextField, useTheme, MenuItem } from '@mui/material';
+import { Autocomplete, CircularProgress, TextField, useTheme } from '@mui/material';
+import { CalendarBlank, Magnify, MagnifyRemoveOutline, CursorDefaultOutline, AccountMultipleOutline, Cow, CurrencyUsd, MathCompass } from 'mdi-material-ui';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
+
+const getDadoTypeIcon = (type: string) => {
+  switch(type){
+    case 'Dados Agropecuário':
+      return <Cow className='text-xl mr-2' />
+    case 'Dados Demográficos':
+      return <AccountMultipleOutline className='text-xl mr-2' />
+    case 'Dados Econômicos':
+      return <CurrencyUsd className='text-xl mr-2' />
+    default: return <></>
+  }
+}
+
+const getRegiaoByLevel = (level: number) : string => {
+  switch(level){
+    case 1:
+      return 'País'
+    case 3:
+      return 'Estados'
+    case 6:
+      return 'Cidades'
+    default: 'Outras Localidades'
+  }
+}
 
 function IBGEDataPage() {
   const theme = useTheme();
   const [data, setData] = useState<dataReturn | null | undefined>();
   const [dataOption, setDataOption] = useState<string>(Object.keys(dataInfo)[0]);
-  const [location, setLocation] = useState<string>(Object.keys(dataLocation)[0])
+  const [locationOptions, setLocationOptions] = useState<object>({});
+  const [location, setLocation] = useState<string>("Brasil")
 
-  console.log(data)
+  const handleChangeLocation = (event: React.ChangeEvent<{ value: unknown }>, newValue: string) => {
+    setLocation(newValue)
+    setData(undefined)
+  }
+
+  const handleChangeDataOption = (event: React.ChangeEvent<{ value: unknown }>, newValue: string) => {
+    setDataOption(newValue)
+    setData(undefined)
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      setData(await getDadoIbgeByFullURL(dataInfo[dataOption].link, location));
+    const fetchData = async () => {
+      if(Object.keys(locationOptions).length > 0) {
+        console.log("cheguei")
+      setData(await getDadoIbgeByFullURL(dataInfo[dataOption].link, location, locationOptions));
+      }
     }
     if (dataOption) {
       fetchData();
     }
-  }, [dataOption, location]);
+  }, [dataOption, location, locationOptions]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const localities = await getAllLocalities()
+      setLocationOptions(localities);
+    }
+    fetchData()
+  }, [])
+
+  console.log(locationOptions)
 
   return (
-    <div className='h-full min-h-screen max-w-screen-2xl flex flex-col items-center w-full'>
-      <h1 className='text-4xl text-white font-bold my-3'>Dados do IBGE</h1>
-      <div className='flex flex-col sm:flex-row'>
-        <Select autoFocus value={location} onChange={(event) => setLocation(event.target.value)} sx={{ width: 200 }}>
-          {Object.keys(dataLocation).map((key) => (
-            <MenuItem key={key} value={key}>{key}</MenuItem>
-          ))}
-        </Select>
+    <div className='h-full flex flex-col items-center w-full px-3'>
+      <h1 className='text-4xl text-white font-bold my-3 text-center'>Dados do IBGE</h1>
+      <div className='flex flex-col space-y-2 w-full items-center justify-center sm:flex-row sm:space-x-4 sm:space-y-0 pb-2'>
+      <Autocomplete
+        disableListWrap
+          renderGroup={(params) => {
+            console.log(params);
+            return(
+            <li key={params.key}>
+              <div className='sticky -top-2 py-2 px-10 font-semibold flex items-center' style={{backgroundColor: 'rgba(60, 60, 80)'}}>{getDadoTypeIcon(params.group)} {params.group}</div>
+              <ul>{params.children}</ul>
+            </li>)
+          }}
+          disablePortal
+          value={location}
+          onChange={handleChangeLocation}
+          loading={Object.keys(locationOptions).length === 0}
+          groupBy={(option) => getRegiaoByLevel(parseInt(locationOptions[option].substring(1, 3)))}
+          options={Object.keys(locationOptions)}
+          sx={{
+            width: { xs: "100%", md: 340 },
+            maxWidth: 340,
+          }}
+          renderInput={(params) => <TextField {...params} label="Localização"
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                {Object.keys(locationOptions).length === 0 ? <CircularProgress color="inherit" size={20} /> : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
+          }} />}
+        />
         <Autocomplete
+          renderGroup={(params) => {
+            console.log(params);
+            return(
+            <li key={params.key}>
+              <div className='sticky -top-2 py-2 px-10 font-semibold flex items-center' style={{backgroundColor: 'rgba(60, 60, 80)'}}>{getDadoTypeIcon(params.group)} {params.group}</div>
+              <ul>{params.children}</ul>
+            </li>)
+          }}
           disablePortal
           value={dataOption}
-          onChange={(event, newValue) => setDataOption(newValue)}
+          onChange={handleChangeDataOption}
           groupBy={(option) => dataInfo[option].type}
           options={Object.keys(dataInfo)}
           sx={{
             width: { xs: "100%", md: 340 },
             maxWidth: 340,
-            "& .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'] .MuiAutocomplete-input": {
-              color: theme.palette.primary.contrastText
-            },
-            "& + .MuiAutocomplete-popper .MuiAutocomplete-option":
-            {
-              backgroundColor: theme.palette.primary.dark,
-              color: theme.palette.primary.contrastText,
-            },
-            "& + .MuiAutocomplete-popper .MuiAutocomplete-option[aria-selected='true']":
-            {
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.primary.contrastText,
-            },
-            "& + .MuiAutocomplete-popper .MuiAutocomplete-option[aria-selected ='true'] .Mui-focused":
-            {
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.primary.contrastText,
-            },
           }}
-          renderInput={(params) => <TextField focused {...params} label="Dados" />}
+          renderInput={(params) => <TextField {...params} label="Dados" />}
         />
       </div>
       {data && (
         <>
-        <div className='w-[70vw] flex justify-between'>
-          <p>Dados de <span style={{color: theme.palette.primary.light}} className='font-semibold'>{data.data[0].name}</span> até <span style={{color: theme.palette.primary.light}} className='font-semibold'>{data.data[data.data.length-1].name}</span></p>
-          <p>Números de resultados: {data.data.length}</p>
+          <div className='w-full flex flex-col text-xs sm:text-sm pt-3 sm:pt-0 max-w-screen-xl sm:-mb-8'>
+            <p><CalendarBlank className='text-lg sm:text-xl' /> Dados de <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{data.data[0].name}</span> até <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{data.data[data.data.length - 1].name}</span></p>
+            <p><Magnify className='text-lg sm:text-xl' /> Números de resultados: {data.data.length}</p>
+            <p><MathCompass className='text-lg sm:text-xl' /> Unidade de medida: {data.unit.toLocaleLowerCase()}</p>
           </div>
-        <div className='grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-center w-full sm:h-[80vh] gap-4 grid-rows-2 lg:pl-6'>
-          <div className='flex justify-center items-center'>
-            <Line data={createChartData(data)} options={createOptions(data, true, true)} style={{ width: '100%', height: '500px' }} />
+          <div className='max-w-[1400px] grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-center items-center w-full sm:h-auto gap-4 grid-rows-2'>
+            <div className='flex justify-center items-center flex-col'>
+              <Line data={createChartData(data)} options={createOptions(data, true, true)} />
+            </div>
+            <div className='flex justify-center items-center'>
+              <Bar data={createChartData(data)} options={createOptions(data, true, true)} />
+            </div>
+            <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center'>
+              <PolarArea data={createChartData(data)} options={createOptions(data)} />
+            </div>
+            <div className='flex justify-center items-center'>
+              <Doughnut data={createChartData(data)} options={createOptions(data)} />
+            </div>
+            <div className='flex justify-center items-center col-span-1 sm:col-span-2 lg:col-span-1'>
+              <Scatter data={createChartData(data, true)} options={createOptions(data, true)} />
+            </div>
           </div>
-          <div className='flex justify-center items-center'>
-            <Bar data={createChartData(data)} options={createOptions(data, true, true)} style={{ width: '100%', height: '500px' }} />
+          <div className='p-3 lg:p-0'>
+            <p className='text-xs opacity-60'>Arraste o mouse por cima dos gráficos para mais informação <CursorDefaultOutline className='text-base' /> </p>
           </div>
-          <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center'>
-            <PolarArea data={createChartData(data)} options={createOptions(data)} style={{ width: '100%', height: '800px' }} />
-          </div>
-          <div className='flex justify-center items-center'>
-            <Doughnut data={createChartData(data)} options={createOptions(data)} style={{ width: '100%', height: '500px' }} />
-          </div>
-          <div className='flex justify-center items-center col-span-1 sm:col-span-2 lg:col-span-1'>
-            <Scatter data={createChartData(data, true)} options={createOptions(data, true)} style={{ width: '100%', height: '500px' }} />
-          </div>
-        </div>
         </>
       )}
 
@@ -97,11 +164,11 @@ function IBGEDataPage() {
       )}
 
       {data === null && (
-        <div className='h-[80vh] items-center justify-center flex'>
-          <p>{location === "" ? "Selecione uma localidade primeiro." : `Não foi encontrado esses dados do IBGE em ${location}`}</p>
+        <div className='h-[50vh] sm:h-[80vh] items-center justify-center flex flex-col space-y-4 text-center'>
+          <p>{location === "" || location === null  ? "Selecione uma localidade primeiro." : `Não foi encontrado esses dados do IBGE em ${location}`}</p>
+          <MagnifyRemoveOutline className='text-3xl' />
         </div>
       )}
-      <span className='w-full flex justify-end'>Desenvolvido por <a href='https://github.com/ViniciusCestarii' className='underline font-semibold' style={{color: theme.palette.primary.light}}>@ViniciusCestarii</a></span>
     </div>
   );
 }

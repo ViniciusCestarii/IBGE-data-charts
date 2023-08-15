@@ -10,18 +10,28 @@ export type dataVariable = {
 export type dataReturn = {
   data: dataVariable[]
   name: string
+  unit: string
 }
 
 export const dataInfo = {
-  'Ovos': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/915/periodos/201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301/variaveis/29'},
-  'Expectativa de Vida': {type: 'Dados Demográficos', link: ''},
-  'População residente estimada': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/2001|2002|2003|2004|2005|2006|2008|2009|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021/variaveis/9324'},
+  'Produção de Leite': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1086/periodos/199701|199702|199703|199704|199801|199802|199803|199804|199901|199902|199903|199904|200001|200002|200003|200004|200101|200102|200103|200104|200201|200202|200203|200204|200301|200302|200303|200304|200401|200402|200403|200404|200501|200502|200503|200504|200601|200602|200603|200604|200701|200702|200703|200704|200801|200802|200803|200804|200901|200902|200903|200904|201001|201002|201003|201004|201101|201102|201103|201104|201201|201202|201203|201204|201301|201302|201303|201304|201401|201402|201403|201404|201501|201502|201503|201504|201601|201602|201603|201604|201701|201702|201703|201704|201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301/variaveis/282?localidades=&classificacao=12716[115236]'},
+  'Produção de Ovo': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/915/periodos/201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301/variaveis/29?localidades='},
+  'Produção de Banana': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4930]'},
+  'Produção de Laranja': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4961]'},
+  'Produção de Limão': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4963]'},
+  'Produção de Manga': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4968]'},
+  'Produção de Batata-doce': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4853]'},
+  'Produção de Cana-de-áçucar': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4857]'},
+  'Produção de Mandioca': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4885]'},
+  'Produção de Milho': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4888]'},
+  'Produção de Soja': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4896]'},
+  'Produção de Tomate': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4899]'},
+  'Área dos estabelecimentos agropecuários utilizada para pastagem': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118269]'},
+  'Área dos estabelecimentos agropecuários utilizada para lavouras': {type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118268]'},
+  'Número de população total': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades='},
+  'Número de população com 80 anos ou mais': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades=&classificacao=58[2503]'},
+  'População residente estimada': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/2001|2002|2003|2004|2005|2006|2008|2009|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021/variaveis/9324?localidades='},
   'PIB': {type: 'Dados Econômicos', link: ''},
-}
-
-export const dataLocation = {
-  'Santa Catarina': 'N3[42]',
-  'Brusque': 'N6[4202909]',
 }
 
 const getInfoByear = (data: object, years: string[]) => {
@@ -31,13 +41,39 @@ const getInfoByear = (data: object, years: string[]) => {
   }));
 }
 
-export const getDadoIbgeByFullURL = async (url: string, location: string): dataReturn => {
-  //https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/2001|2002|2003|2004|2005|2006|2008|2009|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021/variaveis/9324?localidades=N6[4202909]
+export const getAllLocalities = async () => {
+  try {
+    const response = await axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
+    const states = response.data;
 
-  console.log(location)
-  console.log(dataLocation[location])
-  url += "?localidades=" + dataLocation[location]
-  console.log(url)
+    const allLocalities = {"Brasil": "N1[1]"};
+
+    for (const state of states) {
+      allLocalities[state.nome] = `N3[${state.id}]`;
+    }
+
+    for (const state of states) {
+      const municipalitiesResponse = await axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state.sigla}/municipios`);
+      const municipalities = municipalitiesResponse.data;
+      
+      for (const municipality of municipalities) {
+        if (!allLocalities.hasOwnProperty(municipality.nome)) {
+          allLocalities[municipality.nome] = `N6[${municipality.id}]`;
+        }
+      }
+    }
+
+    return allLocalities;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const getDadoIbgeByFullURL = async (url: string, location: string, locationOptions): dataReturn => {
+  const urlLocation = "?localidades=" + locationOptions[location]
+  url = url.replace("?localidades=", urlLocation)
+  console.log(locationOptions[location])
   
   try {
     const response = await axios.get(url);
@@ -48,7 +84,8 @@ export const getDadoIbgeByFullURL = async (url: string, location: string): dataR
 
     const data: dataReturn = {
       data: getInfoByear(response.data[0], years),
-      name: response.data[0].variavel
+      name: response.data[0].variavel,
+      unit: response.data[0].unidade
     }
     return data
   } catch (error) {

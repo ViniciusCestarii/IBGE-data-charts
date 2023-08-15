@@ -176,16 +176,16 @@ function IBGEDataPage() {
             <p><MathCompass className='text-lg sm:text-xl' /> Unidade de medida: {data.unit.toLocaleLowerCase()}</p>
           </div>
           <div className='max-w-[1300px] grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-center items-center w-full sm:h-auto gap-4 grid-rows-2'>
-            <div className='flex justify-center items-center flex-col max-h-[400px]'>
+            <div className='flex justify-center items-center flex-col max-h-[432px]'>
               <Line data={createChartData(data)} options={createOptions(data, true, true)} />
             </div>
-            <div className='flex justify-center items-center max-h-[400px]'>
+            <div className='flex justify-center items-center max-h-[432px]'>
               <Scatter data={createChartData(data, true)} options={createOptions(data, true, true)} />
             </div>
-            <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center max-h-[532px]'>
+            <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center max-h-[564px]'>
               <PolarArea data={createChartData(data)} options={createOptions(data)} />
             </div>
-            <div className='flex justify-center items-center col-span-1 lg:col-span-2 max-h-[400px]'>
+            <div className='flex justify-center items-center col-span-1 lg:col-span-2 max-h-[432px]'>
               <Bar data={createChartData(data)} options={createOptions(data, true, true)} />
             </div>
           </div>

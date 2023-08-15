@@ -3,7 +3,7 @@ import React, { useState, useEffect, ReactNode } from 'react';
 import { getDadoIbgeByFullURL, dataReturn, createOptions, createChartData, dataInfo, getAllLocalities } from '../utils/ibgeAPI';
 import { Bar, Doughnut, Line, PolarArea, Scatter } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Title, Tooltip, Legend, RadialLinearScale, ArcElement } from 'chart.js';
-import { Autocomplete, CircularProgress, TextField, useTheme } from '@mui/material';
+import { Autocomplete, CircularProgress, Popper, TextField, useTheme } from '@mui/material';
 import { CalendarBlank, Magnify, MagnifyRemoveOutline, CursorDefaultOutline, AccountMultipleOutline, Cow, CurrencyUsd, MathCompass } from 'mdi-material-ui';
 import ListboxComponent from '@/components/Listbox';
 
@@ -53,7 +53,6 @@ function IBGEDataPage() {
   useEffect(() => {
     const fetchData = async () => {
       if(Object.keys(locationOptions).length > 0) {
-        console.log("cheguei")
       setData(await getDadoIbgeByFullURL(dataInfo[dataOption].link, location, locationOptions));
       }
     }
@@ -75,6 +74,22 @@ function IBGEDataPage() {
       <h1 className='text-4xl text-white font-bold my-3 text-center'>Dados do IBGE</h1>
       <div className='flex flex-col space-y-2 w-full items-center justify-center sm:flex-row sm:space-x-4 sm:space-y-0 pb-2'>
       <Autocomplete
+              PopperComponent={(props) => (
+                <Popper
+                  {...props}
+                  sx={{
+                    '& .MuiAutocomplete-listbox::-webkit-scrollbar': {
+                      width: '8px',
+                    },
+                    '& .MuiAutocomplete-listbox::-webkit-scrollbar-thumb': {
+                      backgroundColor: theme.palette.primary.light,
+                      borderRadius: '2px',
+                    },
+                    '& .MuiAutocomplete-listbox::-webkit-scrollbar-track': {
+                      backgroundColor: 'rgba(60, 60, 80)',
+                    },
+                  }}
+                />)}
           disablePortal
           ListboxComponent={ListboxComponent}
           disableListWrap
@@ -103,6 +118,22 @@ function IBGEDataPage() {
           }} />}
         />
         <Autocomplete
+        PopperComponent={(props) => (
+          <Popper
+            {...props}
+            sx={{
+              '& .MuiAutocomplete-listbox::-webkit-scrollbar': {
+                width: '8px',
+              },
+              '& .MuiAutocomplete-listbox::-webkit-scrollbar-thumb': {
+                backgroundColor: theme.palette.primary.light,
+                borderRadius: '4px',
+              },
+              '& .MuiAutocomplete-listbox::-webkit-scrollbar-track': {
+                backgroundColor: 'rgba(60, 60, 80)',
+              },
+            }}
+          />)}
           renderGroup={(params) => {
             console.log(params);
             return(

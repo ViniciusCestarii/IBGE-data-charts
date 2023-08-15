@@ -1,14 +1,24 @@
 import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ListSubheader from '@mui/material/ListSubheader';
-import Popper from '@mui/material/Popper';
-import { useTheme, styled } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import { VariableSizeList, ListChildComponentProps } from 'react-window';
 import Typography from '@mui/material/Typography';
+import { CityVariantOutline, Earth, HomeGroup } from 'mdi-material-ui';
 
 const LISTBOX_PADDING = 8; // px
+
+const getLocalityTypeIcon = (locality: string) => {
+  switch(locality){
+    case 'País':
+      return <Earth className='text-xl mr-2' />
+    case 'Estados':
+      return <CityVariantOutline className='text-xl mr-2' />
+    case 'Cidades':
+      return <HomeGroup className='text-xl mr-2' />
+    default: return <></>
+  }
+}
 
 function renderRow(props: ListChildComponentProps) {
   const { data, index, style } = props;
@@ -17,11 +27,10 @@ function renderRow(props: ListChildComponentProps) {
     ...style,
     top: (style.top as number) + LISTBOX_PADDING,
   };
-
   if (dataSet.hasOwnProperty('group')) {
     return (
-      <ListSubheader key={dataSet.key} component="div" style={inlineStyle}>
-        {dataSet.group}
+      <ListSubheader key={dataSet.key} component="div" className='px-10 font-semibold flex items-center'  style={{...inlineStyle, color:"white", backgroundColor: 'rgba(60, 60, 80)'}}>
+        {getLocalityTypeIcon(dataSet.group) }{dataSet.group}
       </ListSubheader>
     );
   }

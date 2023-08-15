@@ -4,7 +4,9 @@ import ListSubheader from '@mui/material/ListSubheader';
 import { useTheme } from '@mui/material/styles';
 import { VariableSizeList, ListChildComponentProps } from 'react-window';
 import Typography from '@mui/material/Typography';
-import { CityVariantOutline, Earth, HomeGroup } from 'mdi-material-ui';
+import CityVariantOutline from 'mdi-material-ui/CityVariantOutline';
+import Earth from 'mdi-material-ui/Earth';
+import HomeGroup from 'mdi-material-ui/HomeGroup';
 
 const LISTBOX_PADDING = 8; // px
 

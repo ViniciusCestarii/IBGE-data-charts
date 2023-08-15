@@ -4,7 +4,14 @@ import { getDadoIbgeByFullURL, dataReturn, createOptions, createChartData, dataI
 import { Bar, Line, PolarArea, Scatter } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Title, Tooltip, Legend, RadialLinearScale, ArcElement } from 'chart.js';
 import { Autocomplete, CircularProgress, Popper, TextField, useTheme } from '@mui/material';
-import { CalendarBlank, Magnify, MagnifyRemoveOutline, CursorDefaultOutline, AccountMultipleOutline, Cow, CurrencyUsd, MathCompass } from 'mdi-material-ui';
+import CalendarBlank from 'mdi-material-ui/CalendarBlank';
+import Magnify from 'mdi-material-ui/Magnify';
+import MagnifyRemoveOutline from 'mdi-material-ui/MagnifyRemoveOutline';
+import CursorDefaultOutline from 'mdi-material-ui/CursorDefaultOutline';
+import AccountMultipleOutline from 'mdi-material-ui/AccountMultipleOutline';
+import Cow from 'mdi-material-ui/Cow';
+import CurrencyUsd from 'mdi-material-ui/CurrencyUsd';
+import MathCompass from 'mdi-material-ui/MathCompass';
 import ListboxComponent from '@/components/Listbox';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
@@ -168,17 +175,17 @@ function IBGEDataPage() {
             <p><Magnify className='text-lg sm:text-xl' /> Números de resultados: {data.data.length}</p>
             <p><MathCompass className='text-lg sm:text-xl' /> Unidade de medida: {data.unit.toLocaleLowerCase()}</p>
           </div>
-          <div className='max-w-[1400px] grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-center items-center w-full sm:h-auto gap-4 grid-rows-2'>
-            <div className='flex justify-center items-center flex-col'>
+          <div className='max-w-[1300px] grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-center items-center w-full sm:h-auto gap-4 grid-rows-2'>
+            <div className='flex justify-center items-center flex-col max-h-[400px]'>
               <Line data={createChartData(data)} options={createOptions(data, true, true)} />
             </div>
-            <div className='flex justify-center items-center'>
+            <div className='flex justify-center items-center max-h-[400px]'>
               <Scatter data={createChartData(data, true)} options={createOptions(data, true, true)} />
             </div>
-            <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center'>
+            <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center max-h-[532px]'>
               <PolarArea data={createChartData(data)} options={createOptions(data)} />
             </div>
-            <div className='flex justify-center items-center col-span-1 lg:col-span-2'>
+            <div className='flex justify-center items-center col-span-1 lg:col-span-2 max-h-[400px]'>
               <Bar data={createChartData(data)} options={createOptions(data, true, true)} />
             </div>
           </div>

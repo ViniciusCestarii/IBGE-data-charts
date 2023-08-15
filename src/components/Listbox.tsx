@@ -44,12 +44,11 @@ function renderRow(props: ListChildComponentProps) {
 
 const OuterElementContext = React.createContext({});
 
+// eslint-disable-next-line react/display-name
 const OuterElementType = React.forwardRef<HTMLDivElement>((props, ref) => {
   const outerProps = React.useContext(OuterElementContext);
   return <div ref={ref} {...props} {...outerProps} />;
 });
-
-OuterElementType.displayName = 'OuterElementType';
 
 function useResetCache(data: any) {
   const ref = React.useRef<VariableSizeList>(null);

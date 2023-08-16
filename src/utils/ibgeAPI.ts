@@ -50,6 +50,7 @@ export const dataInfo: {
 }
 
 export const getInfoByear = (data: any, years: string[], months?: boolean) => {
+  //todo validate values from data (if its a number)
   return years.map((year) => ({
     value: data.resultados[0].series[0].serie[year],
     name: year.length > 4 ? months ? `${year.substring(0, 4)} mês ${year.substring(4, 6)}` : `${year.substring(0, 4)} ${year.substring(5, 6)}° trimestre` : year,

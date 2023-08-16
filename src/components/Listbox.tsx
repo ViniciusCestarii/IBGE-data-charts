@@ -13,11 +13,11 @@ const LISTBOX_PADDING = 8; // px
 const getLocalityTypeIcon = (locality: string) => {
   switch (locality) {
     case 'País':
-      return <Earth className='text-xl mr-2' fontSize='inherit' />
+      return <Earth className='mr-2' fontSize='small' />
     case 'Estados':
-      return <CityVariantOutline className='text-xl mr-2' fontSize='inherit' />
+      return <CityVariantOutline className='mr-2' fontSize='small' />
     case 'Cidades':
-      return <HomeGroup className='text-xl mr-2' fontSize='inherit' />
+      return <HomeGroup className='mr-2' fontSize='small' />
     default: return <></>
   }
 }

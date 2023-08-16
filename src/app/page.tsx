@@ -33,11 +33,11 @@ const checkMaxYears = (dataOption : string) : boolean =>(
 const getDadoTypeIcon = (type: string) => {
   switch (type) {
     case 'Dados Agropecuários':
-      return <Cow className='text-xl mr-2' fontSize='inherit' />
+      return <Cow className='mr-2' fontSize='small' />
     case 'Dados Demográficos':
-      return <AccountMultipleOutline className='text-xl mr-2' fontSize='inherit' />
+      return <AccountMultipleOutline className='mr-2' fontSize='small' />
     case 'Dados Econômicos':
-      return <CurrencyUsd className='text-xl mr-2' fontSize='inherit' />
+      return <CurrencyUsd className='mr-2' fontSize='small' />
     default: return <></>
   }
 }
@@ -106,8 +106,9 @@ function IBGEDataPage() {
 
   useEffect(() => {
     if(data){
+      console.log(data)
       const cloneData = {...data}
-      cloneData.data = cloneData.data.filter((_, index) => (index + 1) % (isMaxYears ? 4 : 1) === 0)
+      cloneData.data = cloneData.data.filter((_, index) => (index +1) % (isMaxYears ? 4 : 1) === 0)
       setFilteredData(cloneData)
     } else {
       setFilteredData(data)
@@ -164,7 +165,7 @@ function IBGEDataPage() {
               ...params.InputProps,
               endAdornment: (
                 <>
-                  {Object.keys(locationOptions).length === 0 ? <CircularProgress color="inherit" size={20} /> : null}
+                  {Object.keys(locationOptions).length === 0 ? <CircularProgress color="secondary" size={20} /> : null}
                   {params.InputProps.endAdornment}
                 </>
               ),
@@ -205,9 +206,9 @@ function IBGEDataPage() {
           }}
           renderInput={(params) => <TextField {...params} label="Dados" />}
         />
-        <TooltipMUI title={`Percentual do total geral ${dataInfo[dataOption].percentage ? "" : "[Desabilitado (esse tipo de dado não suporta)]"}`} placement='top'>
+        <TooltipMUI title={`Percentual do total geral ${dataInfo[dataOption].percentage ? "" : "[ Desabilitado | esse tipo de dado não suporta ]"}`} placement='top'>
           <div className='flex flex-row items-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
-            <Percent className='text-xl -mb-2' style={{color: dataInfo[dataOption].percentage ? 'white' : 'rgba(120, 120, 160, 0.7)'}} fontSize='inherit' />
+            <Percent className='-mb-2' style={{color: dataInfo[dataOption].percentage ? 'white' : 'rgba(120, 120, 160, 0.7)'}} fontSize='small' />
             <Checkbox
               disabled={dataInfo[dataOption].percentage ? false : true}
               className='-mb-2'
@@ -217,9 +218,9 @@ function IBGEDataPage() {
 
           </div>
         </TooltipMUI>
-          <TooltipMUI title={`Mostrar 1/4  dos dados ${checkMaxYears(dataOption) ? "" : '[Desabilitado (há poucos dados)]'}`} placement='top'>
+          <TooltipMUI title={`Mostrar 1/4  dos dados ${checkMaxYears(dataOption) ? "" : '[ Desabilitado | há poucos dados ]'}`} placement='top'>
             <div className='flex flex-row items-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
-              <Division className='text-2xl -mb-3' style={{color: checkMaxYears(dataOption) ? 'white' : 'rgba(120, 120, 160, 0.7)'}} fontSize='inherit' />
+              <Division className='-mb-2' style={{color: checkMaxYears(dataOption) ? 'white' : 'rgba(120, 120, 160, 0.7)'}} fontSize='small' />
               <Checkbox
                 disabled={!checkMaxYears(dataOption)}
                 className='-mb-2'
@@ -233,9 +234,9 @@ function IBGEDataPage() {
       {filteredData && checkData(filteredData.data[0].value) && (
         <>
           <div className='w-full flex flex-col text-xs sm:text-sm pt-3 sm:pt-0 max-w-screen-xl sm:-mb-8'>
-            <p><CalendarBlank className='text-lg sm:text-xl' fontSize='inherit' /> Dados de <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{filteredData.data[0].name}</span> até <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{filteredData.data[filteredData.data.length - 1].name}</span></p>
-            <p><Magnify className='text-lg sm:text-xl' fontSize='inherit' /> Números de resultados: {filteredData.data.length}</p>
-            <p><MathCompass className='text-lg sm:text-xl' fontSize='inherit' /> Unidade de medida: {filteredData.unit.toLocaleLowerCase()}</p>
+            <p><CalendarBlank fontSize='small' /> Dados de <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{filteredData.data[0].name}</span> até <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{filteredData.data[filteredData.data.length - 1].name}</span></p>
+            <p><Magnify fontSize='small' /> Números de resultados: {filteredData.data.length}</p>
+            <p><MathCompass fontSize='small' /> Unidade de medida: {filteredData.unit.toLocaleLowerCase()}</p>
           </div>
           <div className='max-w-[1300px] grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-center items-center w-full sm:h-auto gap-4 grid-rows-2'>
             <div className='flex justify-center items-center flex-col max-h-[432px]'>
@@ -252,7 +253,7 @@ function IBGEDataPage() {
             </div>
           </div>
           <div className='p-3 lg:p-0'>
-            <p className='text-xs opacity-60 text-center'>Arraste o mouse por cima dos gráficos para mais informação <CursorDefaultOutline className='text-base' /> </p>
+            <p className='text-xs opacity-60 text-center'>Arraste o mouse por cima dos gráficos para mais informação <CursorDefaultOutline fontSize='small' /> </p>
           </div>
         </>
       )}
@@ -266,7 +267,7 @@ function IBGEDataPage() {
       {(filteredData === null || filteredData && !checkData(filteredData.data[0].value)) && (
         <div className='h-[50vh] sm:h-[80vh] items-center justify-center flex flex-col space-y-4 text-center'>
           <p>{location === "" || location === null ? "Selecione uma localidade primeiro." : `Não foi encontrado esses dados do IBGE em ${location}`}</p>
-          <MagnifyRemoveOutline className='text-3xl' />
+          <MagnifyRemoveOutline fontSize='medium' />
         </div>
       )}
     </div>

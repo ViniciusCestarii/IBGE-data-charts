@@ -17,39 +17,50 @@ export const dataInfo: {
   [key: string]: {
     type: string;
     link: string;
+    percentage?: boolean;
+    months?: boolean;
   };
 } = {
-  'Produção de Leite': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1086/periodos/199701|199702|199703|199704|199801|199802|199803|199804|199901|199902|199903|199904|200001|200002|200003|200004|200101|200102|200103|200104|200201|200202|200203|200204|200301|200302|200303|200304|200401|200402|200403|200404|200501|200502|200503|200504|200601|200602|200603|200604|200701|200702|200703|200704|200801|200802|200803|200804|200901|200902|200903|200904|201001|201002|201003|201004|201101|201102|201103|201104|201201|201202|201203|201204|201301|201302|201303|201304|201401|201402|201403|201404|201501|201502|201503|201504|201601|201602|201603|201604|201701|201702|201703|201704|201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301/variaveis/282?localidades=&classificacao=12716[115236]' },
-  'Produção de Ovo': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/915/periodos/201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301/variaveis/29?localidades=' },
-  'Produção de Banana': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4930]' },
-  'Produção de Laranja': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4961]' },
-  'Produção de Limão': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4963]' },
-  'Produção de Manga': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4968]' },
-  'Produção de Batata-doce': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4853]' },
-  'Produção de Cana-de-áçucar': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4857]' },
-  'Produção de Mandioca': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4885]' },
-  'Produção de Milho': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4888]' },
-  'Produção de Soja': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4896]' },
-  'Produção de Tomate': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4899]' },
-  'Área dos estabelecimentos agropecuários utilizada para pastagem': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118269]' },
-  'Área dos estabelecimentos agropecuários utilizada para lavouras': { type: 'Dados Agropecuário', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118268]' },
+  'Produção de Leite': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1086/periodos/199701|199702|199703|199704|199801|199802|199803|199804|199901|199902|199903|199904|200001|200002|200003|200004|200101|200102|200103|200104|200201|200202|200203|200204|200301|200302|200303|200304|200401|200402|200403|200404|200501|200502|200503|200504|200601|200602|200603|200604|200701|200702|200703|200704|200801|200802|200803|200804|200901|200902|200903|200904|201001|201002|201003|201004|201101|201102|201103|201104|201201|201202|201203|201204|201301|201302|201303|201304|201401|201402|201403|201404|201501|201502|201503|201504|201601|201602|201603|201604|201701|201702|201703|201704|201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301/variaveis/282?localidades=&classificacao=12716[115236]' },
+  'Produção de Ovo': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/915/periodos/201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301/variaveis/29?localidades=' },
+  'Produção de Banana': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4930]' },
+  'Produção de Laranja': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4961]' },
+  'Produção de Limão': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4963]' },
+  'Produção de Manga': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1730/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=227[4968]' },
+  'Produção de Batata-doce': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4853]' },
+  'Produção de Cana-de-áçucar': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4857]' },
+  'Produção de Mandioca': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4885]' },
+  'Produção de Milho': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4888]' },
+  'Produção de Soja': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4896]' },
+  'Produção de Tomate': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4899]' },
+  'Área dos estabelecimentos agropecuários utilizada para pastagem': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118269]' },
+  'Área dos estabelecimentos agropecuários utilizada para lavouras': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118268]' },
   'Número total de brasileiros natos': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades=' },
   'Número de brasileiros natos com 80 anos ou mais': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades=&classificacao=58[2503]' },
-  'População residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/93?localidades=&classificacao=86[0]|133[0]'},
   'População residente estimada': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/2001|2002|2003|2004|2005|2006|2008|2009|2011|2012|2013|2014|2015|2016|2017|2018|2019|2020|2021/variaveis/9324?localidades='},
-  'População católica apostólica romana residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/93?localidades=&classificacao=86[0]|133[95263]'},
-  'Porcentagem da população católica apostólica romana residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/1000093?localidades=&classificacao=86[0]|133[95263]'},
-  'População evangélica residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/93?localidades=&classificacao=86[0]|133[95277]'},
-  'Porcentagem da população evangélica residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/1000093?localidades=&classificacao=86[0]|133[95277]'},
-  'Massa de rendimento mensal das pessoas de 14 anos ou mais de idade com rendimento de trabalho, habitualmente recebido em todos os trabalhos': {type: 'Dados Econômicos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/5606/periodos/201201|201202|201203|201204|201301|201302|201303|201304|201401|201402|201403|201404|201501|201502|201503|201504|201601|201602|201603|201604|201701|201702|201703|201704|201801|201802|201803|201804|201901|201902|201903|201904|202001|202002|202003|202004|202101|202102|202103|202104|202201|202202|202203|202204|202301|202302/variaveis/6293?localidades='},
+  'População residente branca': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/136/periodos/1991|2000|2010/variaveis/93?localidades=&classificacao=86[2776]', percentage: true },
+  'População residente parda': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/136/periodos/1991|2000|2010/variaveis/93?localidades=&classificacao=86[2779]', percentage: true},
+  'População residente preta': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/136/periodos/1991|2000|2010/variaveis/93?localidades=&classificacao=86[2777]', percentage: true },
+  'População residente indígena': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/136/periodos/1991|2000|2010/variaveis/93?localidades=&classificacao=86[2780]', percentage: true },
+  'População residente amarela': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/136/periodos/1991|2000|2010/variaveis/93?localidades=&classificacao=86[2778]', percentage: true },
+  'População católica apostólica romana residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/93?localidades=&classificacao=86[0]|133[95263]', percentage: true},
+  'População evangélica residente': {type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/2094/periodos/2000|2010/variaveis/93?localidades=&classificacao=86[0]|133[95277]', percentage: true },
   'PIB': { type: 'Dados Econômicos', link: '' },
+  'Número de pessoas trabalhando em indústria': { type: 'Dados Econômicos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1628/periodos/200012|200101|200102|200103|200104|200105|200106|200107|200108|200109|200110|200111|200112|200201|200202|200203|200204|200205|200206|200207|200208|200209|200210|200211|200212|200301|200302|200303|200304|200305|200306|200307|200308|200309|200310|200311|200312|200401|200402|200403|200404|200405|200406|200407|200408|200409|200410|200411|200412|200501|200502|200503|200504|200505|200506|200507|200508|200509|200510|200511|200512|200601|200602|200603|200604|200605|200606|200607|200608|200609|200610|200611|200612|200701|200702|200703|200704|200705|200706|200707|200708|200709|200710|200711|200712|200801|200802|200803|200804|200805|200806|200807|200808|200809|200810|200811|200812|200901|200902|200903|200904|200905|200906|200907|200908|200909|200910|200911|200912|201001|201002|201003|201004|201005|201006|201007|201008|201009|201010|201011|201012|201101|201102|201103|201104|201105|201106|201107|201108|201109|201110|201111|201112|201201|201202|201203|201204|201205|201206|201207|201208|201209|201210|201211|201212|201301|201302|201303|201304|201305|201306|201307|201308|201309|201310|201311|201312|201401|201402|201403|201404|201405|201406|201407|201408|201409|201410|201411|201412|201501|201502|201503|201504|201505|201506|201507|201508|201509|201510|201511|201512/variaveis/19?localidades=&classificacao=24[2541]|11773[95021]', months: true },
 }
 
-const getInfoByear = (data: any, years: string[]) => {
+export const getInfoByear = (data: any, years: string[], months?: boolean) => {
   return years.map((year) => ({
     value: data.resultados[0].series[0].serie[year],
-    name: year.length > 4 ? `${year.substring(0, 4)} ${year.substring(5, 6)}° trimestre` : year,
+    name: year.length > 4 ? months ? `${year.substring(0, 4)} mês ${year.substring(4, 6)}` : `${year.substring(0, 4)} ${year.substring(5, 6)}° trimestre` : year,
   }));
+}
+
+export const getYearsFromUrl = (url: string) : string[]=> {
+  const start = url.indexOf("periodos/") + "periodos/".length;
+  const end = url.indexOf("/variaveis");
+  const numbersStr = url.slice(start, end);
+  return numbersStr.split("|");
 }
 
 export const getAllLocalities = async () => {
@@ -73,6 +84,8 @@ export const getAllLocalities = async () => {
     for (const municipality of municipalities.sort((a, b) => a.nome.localeCompare(b.nome))) {
       if (!allLocalities.hasOwnProperty(municipality.nome)) {
         allLocalities[municipality.nome] = `N6[${municipality.id}]`;
+      } else {
+        allLocalities[municipality.nome + " (cidade)"] = `N6[${municipality.id}]`;
       }
     }
 
@@ -83,19 +96,23 @@ export const getAllLocalities = async () => {
   }
 }
 
-export const getDadoIbgeByFullURL = async (url: string, location: string, locationOptions: { [key: string]: string }): Promise<dataReturn | null> => {
+export const getDadoIbgeByFullURL = async (url: string, location: string, locationOptions: { [key: string]: string }, isPercentage : boolean, months?: boolean): Promise<dataReturn | null> => {
   const urlLocation = "?localidades=" + locationOptions[location]
   url = url.replace("?localidades=", urlLocation)
 
+  console.log(isPercentage)
+
+  if(isPercentage){
+    url = url.replace("variaveis/", "variaveis/10000")
+  }
+  console.log(url)
+
   try {
     const response = await axios.get(url);
-    const start = url.indexOf("periodos/") + "periodos/".length;
-    const end = url.indexOf("/variaveis");
-    const numbersStr = url.slice(start, end);
-    let years = numbersStr.split("|");
+    const years = getYearsFromUrl(url)
 
     const data: dataReturn = {
-      data: getInfoByear(response.data[0], years),
+      data: getInfoByear(response.data[0], years, months),
       name: response.data[0].variavel,
       unit: response.data[0].unidade
     }

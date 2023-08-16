@@ -6,7 +6,7 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Informações do IBGE',
+  title: 'IBGE Charts',
   description: 'Gerador de gráficos das informações do IBGE',
 }
 

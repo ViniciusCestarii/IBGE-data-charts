@@ -19,6 +19,16 @@ const theme = createTheme({
       contrastText: '#FFF'
     },
   },
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          fontSize: "0.75rem",
+          backgroundColor: 'rgba(60, 60, 80, 0.7)'
+        },
+      },
+    },
+  },
 })
 
 interface MuiThemeprops {

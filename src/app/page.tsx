@@ -1,9 +1,9 @@
 'use client'
-import React, { useState, useEffect, ReactNode, SyntheticEvent } from 'react';
-import { getDadoIbgeByFullURL, dataReturn, createOptions, createChartData, dataInfo, getAllLocalities } from '../utils/ibgeAPI';
+import { useState, useEffect, ReactNode } from 'react';
+import { getDadoIbgeByFullURL, dataReturn, createOptions, createChartData, dataInfo, getAllLocalities, getYearsFromUrl } from '../utils/ibgeAPI';
 import { Bar, Line, PolarArea, Scatter } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Title, Tooltip, Legend, RadialLinearScale, ArcElement } from 'chart.js';
-import { Autocomplete, CircularProgress, Popper, TextField, useTheme } from '@mui/material';
+import { Autocomplete, Checkbox, CircularProgress, Popper, TextField, useTheme, Tooltip as TooltipMUI } from '@mui/material';
 import CalendarBlank from 'mdi-material-ui/CalendarBlank';
 import Magnify from 'mdi-material-ui/Magnify';
 import MagnifyRemoveOutline from 'mdi-material-ui/MagnifyRemoveOutline';
@@ -12,6 +12,8 @@ import AccountMultipleOutline from 'mdi-material-ui/AccountMultipleOutline';
 import Cow from 'mdi-material-ui/Cow';
 import CurrencyUsd from 'mdi-material-ui/CurrencyUsd';
 import MathCompass from 'mdi-material-ui/MathCompass';
+import Percent from 'mdi-material-ui/Percent';
+import Division from 'mdi-material-ui/Division';
 import ListboxComponent from '@/components/Listbox';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
@@ -20,14 +22,22 @@ interface LocationOptions {
   [key: string]: string;
 }
 
+const checkData = (data: string | null | undefined) : boolean => (
+  !(data === null || data === undefined || data === "..." || data === ".." || data === ".")
+)
+
+const checkMaxYears = (dataOption : string) : boolean =>(
+  getYearsFromUrl(dataInfo[dataOption].link).length > 40
+)
+
 const getDadoTypeIcon = (type: string) => {
   switch (type) {
-    case 'Dados Agropecuário':
-      return <Cow className='text-xl mr-2' />
+    case 'Dados Agropecuários':
+      return <Cow className='text-xl mr-2' fontSize='inherit' />
     case 'Dados Demográficos':
-      return <AccountMultipleOutline className='text-xl mr-2' />
+      return <AccountMultipleOutline className='text-xl mr-2' fontSize='inherit' />
     case 'Dados Econômicos':
-      return <CurrencyUsd className='text-xl mr-2' />
+      return <CurrencyUsd className='text-xl mr-2' fontSize='inherit' />
     default: return <></>
   }
 }
@@ -47,9 +57,20 @@ const getRegiaoByLevel = (level: number): string => {
 function IBGEDataPage() {
   const theme = useTheme();
   const [data, setData] = useState<dataReturn | null | undefined>();
+  const [filteredData, setFilteredData] = useState<dataReturn | null | undefined>();
   const [dataOption, setDataOption] = useState<string>(Object.keys(dataInfo)[0]);
   const [locationOptions, setLocationOptions] = useState<LocationOptions>({});
   const [location, setLocation] = useState<string>("Brasil")
+  const [isPercentage, setIsPercentage] = useState<boolean>(false);
+  const [isMaxYears, setIsMaxYears] = useState<boolean>(false);
+
+  const handleChangeIsPercentage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsPercentage(event.target.checked);
+  };
+
+  const handleChangeIsMaxYear = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsMaxYears(event.target.checked);
+  };
 
   const handleChangeLocation = (event: React.SyntheticEvent<Element, Event>, newValue: string | null) => {
     if (newValue !== null) {
@@ -61,6 +82,13 @@ function IBGEDataPage() {
   const handleChangeDataOption = (event: React.SyntheticEvent<Element, Event>, newValue: string | null) => {
     if (newValue !== null) {
       setDataOption(newValue);
+      if(!dataInfo[newValue].percentage){
+        setIsPercentage(false);
+      }
+      if(!checkMaxYears(newValue)){
+        setIsMaxYears(false);
+      }
+
       setData(undefined);
     }
   };
@@ -68,13 +96,23 @@ function IBGEDataPage() {
   useEffect(() => {
     const fetchData = async () => {
       if (Object.keys(locationOptions).length > 0) {
-        setData(await getDadoIbgeByFullURL(dataInfo[dataOption].link, location, locationOptions));
+        setData(await getDadoIbgeByFullURL(dataInfo[dataOption].link, location, locationOptions, isPercentage, dataInfo[dataOption].months));
       }
     }
     if (dataOption) {
       fetchData();
     }
-  }, [dataOption, location, locationOptions]);
+  }, [dataOption, location, locationOptions, isPercentage]);
+
+  useEffect(() => {
+    if(data){
+      const cloneData = {...data}
+      cloneData.data = cloneData.data.filter((_, index) => (index + 1) % (isMaxYears ? 4 : 1) === 0)
+      setFilteredData(cloneData)
+    } else {
+      setFilteredData(data)
+    }
+  }, [isMaxYears, data])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -167,41 +205,65 @@ function IBGEDataPage() {
           }}
           renderInput={(params) => <TextField {...params} label="Dados" />}
         />
+        <TooltipMUI title={`Percentual do total geral ${dataInfo[dataOption].percentage ? "" : "[Desabilitado (esse tipo de dado não suporta)]"}`} placement='top'>
+          <div className='flex flex-row items-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
+            <Percent className='text-xl -mb-2' style={{color: dataInfo[dataOption].percentage ? 'white' : 'rgba(120, 120, 160, 0.7)'}} fontSize='inherit' />
+            <Checkbox
+              disabled={dataInfo[dataOption].percentage ? false : true}
+              className='-mb-2'
+              checked={isPercentage}
+              onChange={handleChangeIsPercentage}
+            />
+
+          </div>
+        </TooltipMUI>
+          <TooltipMUI title={`Mostrar 1/4  dos dados ${checkMaxYears(dataOption) ? "" : '[Desabilitado (há poucos dados)]'}`} placement='top'>
+            <div className='flex flex-row items-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
+              <Division className='text-2xl -mb-3' style={{color: checkMaxYears(dataOption) ? 'white' : 'rgba(120, 120, 160, 0.7)'}} fontSize='inherit' />
+              <Checkbox
+                disabled={!checkMaxYears(dataOption)}
+                className='-mb-2'
+                checked={isMaxYears}
+                onChange={handleChangeIsMaxYear}
+              />
+  
+            </div>
+          </TooltipMUI>
       </div>
-      {data && data && data.data[0].value !== "..." && (
+      {filteredData && checkData(filteredData.data[0].value) && (
         <>
           <div className='w-full flex flex-col text-xs sm:text-sm pt-3 sm:pt-0 max-w-screen-xl sm:-mb-8'>
-            <p><CalendarBlank className='text-lg sm:text-xl' /> Dados de <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{data.data[0].name}</span> até <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{data.data[data.data.length - 1].name}</span></p>
-            <p><Magnify className='text-lg sm:text-xl' /> Números de resultados: {data.data.length}</p>
-            <p><MathCompass className='text-lg sm:text-xl' /> Unidade de medida: {data.unit.toLocaleLowerCase()}</p>
+            <p><CalendarBlank className='text-lg sm:text-xl' fontSize='inherit' /> Dados de <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{filteredData.data[0].name}</span> até <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{filteredData.data[filteredData.data.length - 1].name}</span></p>
+            <p><Magnify className='text-lg sm:text-xl' fontSize='inherit' /> Números de resultados: {filteredData.data.length}</p>
+            <p><MathCompass className='text-lg sm:text-xl' fontSize='inherit' /> Unidade de medida: {filteredData.unit.toLocaleLowerCase()}</p>
           </div>
           <div className='max-w-[1300px] grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-center items-center w-full sm:h-auto gap-4 grid-rows-2'>
             <div className='flex justify-center items-center flex-col max-h-[432px]'>
-              <Line data={createChartData(data)} options={createOptions(data, true, true)} />
+              <Line data={createChartData(filteredData)} options={createOptions(filteredData, true, true)} />
             </div>
             <div className='flex justify-center items-center max-h-[432px]'>
-              <Scatter data={createChartData(data, true)} options={createOptions(data, true, true)} />
+              <Scatter data={createChartData(filteredData, true)} options={createOptions(filteredData, true, true)} />
             </div>
             <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center max-h-[564px]'>
-              <PolarArea data={createChartData(data)} options={createOptions(data)} />
+              <PolarArea data={createChartData(filteredData)} options={createOptions(filteredData)} />
             </div>
             <div className='flex justify-center items-center col-span-1 lg:col-span-2 max-h-[432px]'>
-              <Bar data={createChartData(data)} options={createOptions(data, true, true)} />
+              <Bar data={createChartData(filteredData)} options={createOptions(filteredData, true, true)} />
             </div>
           </div>
           <div className='p-3 lg:p-0'>
-            <p className='text-xs opacity-60'>Arraste o mouse por cima dos gráficos para mais informação <CursorDefaultOutline className='text-base' /> </p>
+            <p className='text-xs opacity-60 text-center'>Arraste o mouse por cima dos gráficos para mais informação <CursorDefaultOutline className='text-base' /> </p>
           </div>
         </>
       )}
 
-      {data === undefined && (
+      {filteredData === undefined && (
         <div className='fixed h-screen items-center flex'>
           <CircularProgress color='secondary' />
         </div>
       )}
 
-      {(data === null || data && data.data[0].value === "...") && (
+      {(filteredData === null || filteredData && !checkData(filteredData.data[0].value)) && (
         <div className='h-[50vh] sm:h-[80vh] items-center justify-center flex flex-col space-y-4 text-center'>
           <p>{location === "" || location === null ? "Selecione uma localidade primeiro." : `Não foi encontrado esses dados do IBGE em ${location}`}</p>
           <MagnifyRemoveOutline className='text-3xl' />

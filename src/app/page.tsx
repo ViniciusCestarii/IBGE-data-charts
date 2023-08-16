@@ -12,8 +12,8 @@ import AccountMultipleOutline from 'mdi-material-ui/AccountMultipleOutline';
 import Cow from 'mdi-material-ui/Cow';
 import CurrencyUsd from 'mdi-material-ui/CurrencyUsd';
 import MathCompass from 'mdi-material-ui/MathCompass';
-import Percent from 'mdi-material-ui/Percent';
-import Division from 'mdi-material-ui/Division';
+import PercentBox from 'mdi-material-ui/PercentBox';
+import DivisionBox from 'mdi-material-ui/DivisionBox';
 import ListboxComponent from '@/components/Listbox';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
@@ -22,11 +22,11 @@ interface LocationOptions {
   [key: string]: string;
 }
 
-const checkData = (data: string | null | undefined) : boolean => (
-  !(data === null || data === undefined || data === "..." || data === ".." || data === ".")
+const checkData = (data: dataReturn | null | undefined): boolean => (
+  !!(data && data.data && data.data[0] && data.data[0].value)
 )
 
-const checkMaxYears = (dataOption : string) : boolean =>(
+const checkMaxYears = (dataOption: string): boolean => (
   getYearsFromUrl(dataInfo[dataOption].link).length > 40
 )
 
@@ -82,10 +82,10 @@ function IBGEDataPage() {
   const handleChangeDataOption = (event: React.SyntheticEvent<Element, Event>, newValue: string | null) => {
     if (newValue !== null) {
       setDataOption(newValue);
-      if(!dataInfo[newValue].percentage){
+      if (!dataInfo[newValue].percentage) {
         setIsPercentage(false);
       }
-      if(!checkMaxYears(newValue)){
+      if (!checkMaxYears(newValue)) {
         setIsMaxYears(false);
       }
 
@@ -105,10 +105,10 @@ function IBGEDataPage() {
   }, [dataOption, location, locationOptions, isPercentage]);
 
   useEffect(() => {
-    if(data){
+    if (data) {
       console.log(data)
-      const cloneData = {...data}
-      cloneData.data = cloneData.data.filter((_, index) => (index +1) % (isMaxYears ? 4 : 1) === 0)
+      const cloneData = { ...data }
+      cloneData.data = cloneData.data.filter((_, index) => index % (isMaxYears ? 4 : 1) === 0)
       setFilteredData(cloneData)
     } else {
       setFilteredData(data)
@@ -206,32 +206,33 @@ function IBGEDataPage() {
           }}
           renderInput={(params) => <TextField {...params} label="Dados" />}
         />
-        <TooltipMUI title={`Percentual do total geral ${dataInfo[dataOption].percentage ? "" : "[ Desabilitado | esse tipo de dado não suporta ]"}`} placement='top'>
-          <div className='flex flex-row items-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
-            <Percent className='-mb-2' style={{color: dataInfo[dataOption].percentage ? 'white' : 'rgba(120, 120, 160, 0.7)'}} fontSize='small' />
-            <Checkbox
-              disabled={dataInfo[dataOption].percentage ? false : true}
-              className='-mb-2'
-              checked={isPercentage}
-              onChange={handleChangeIsPercentage}
-            />
-
-          </div>
-        </TooltipMUI>
-          <TooltipMUI title={`Mostrar 1/4  dos dados ${checkMaxYears(dataOption) ? "" : '[ Desabilitado | há poucos dados ]'}`} placement='top'>
+        <div className='flex flex-col sm:flex-row'>
+          <TooltipMUI title={`Percentual do total geral ${dataInfo[dataOption].percentage && checkData(filteredData) ? "" : "[ Desabilitado | esse tipo de dado não suporta ]"}`} placement='top'>
             <div className='flex flex-row items-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
-              <Division className='-mb-2' style={{color: checkMaxYears(dataOption) ? 'white' : 'rgba(120, 120, 160, 0.7)'}} fontSize='small' />
+              <PercentBox className='-mb-2' style={{ color: dataInfo[dataOption].percentage && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox
-                disabled={!checkMaxYears(dataOption)}
+                disabled={!(dataInfo[dataOption].percentage && checkData(filteredData))}
+                className='-mb-2'
+                checked={isPercentage}
+                onChange={handleChangeIsPercentage}
+              />
+
+            </div>
+          </TooltipMUI>
+          <TooltipMUI title={`Mostrar 1/4  dos dados ${checkMaxYears(dataOption) && checkData(filteredData) ? "" : '[ Desabilitado | há poucos dados ]'}`} placement='top'>
+            <div className='flex flex-row items-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
+              <DivisionBox className='-mb-2' style={{ color: checkMaxYears(dataOption) && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
+              <Checkbox
+                disabled={!(checkMaxYears(dataOption) && checkData(filteredData))}
                 className='-mb-2'
                 checked={isMaxYears}
                 onChange={handleChangeIsMaxYear}
               />
-  
             </div>
           </TooltipMUI>
+        </div>
       </div>
-      {filteredData && checkData(filteredData.data[0].value) && (
+      {filteredData && checkData(filteredData) && (
         <>
           <div className='w-full flex flex-col text-xs sm:text-sm pt-3 sm:pt-0 max-w-screen-xl sm:-mb-8'>
             <p><CalendarBlank fontSize='small' /> Dados de <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{filteredData.data[0].name}</span> até <span style={{ color: theme.palette.primary.light }} className='font-semibold'>{filteredData.data[filteredData.data.length - 1].name}</span></p>
@@ -264,7 +265,7 @@ function IBGEDataPage() {
         </div>
       )}
 
-      {(filteredData === null || filteredData && !checkData(filteredData.data[0].value)) && (
+      {(filteredData === null || filteredData && !checkData(filteredData)) && (
         <div className='h-[50vh] sm:h-[80vh] items-center justify-center flex flex-col space-y-4 text-center'>
           <p>{location === "" || location === null ? "Selecione uma localidade primeiro." : `Não foi encontrado esses dados do IBGE em ${location}`}</p>
           <MagnifyRemoveOutline fontSize='medium' />

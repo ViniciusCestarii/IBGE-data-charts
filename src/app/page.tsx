@@ -96,7 +96,7 @@ function IBGEDataPage() {
   useEffect(() => {
     const fetchData = async () => {
       if (Object.keys(locationOptions).length > 0) {
-        setData(await getDadoIbgeByFullURL(dataInfo[dataOption].link, location, locationOptions, isPercentage, dataInfo[dataOption].months));
+        setData(await getDadoIbgeByFullURL(dataInfo[dataOption].link, location, locationOptions, isPercentage ? dataInfo[dataOption].percentage : undefined, dataInfo[dataOption].months));
       }
     }
     if (dataOption) {
@@ -106,7 +106,6 @@ function IBGEDataPage() {
 
   useEffect(() => {
     if (data) {
-      console.log(data)
       const cloneData = { ...data }
       cloneData.data = cloneData.data.filter((_, index) => index % (isMaxYears ? 4 : 1) === 0)
       setFilteredData(cloneData)

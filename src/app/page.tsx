@@ -212,6 +212,11 @@ function IBGEDataPage() {
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
               <PercentBox className='sm:-mb-2' style={{ color: dataInfo[dataOption].percentage && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox
+                sx={{
+                  '&.Mui-checked': {
+                    color: "white",
+                  },
+                }}
                 disabled={!(dataInfo[dataOption].percentage && checkData(filteredData))}
                 className='sm:-mb-2'
                 checked={isPercentage}
@@ -224,6 +229,11 @@ function IBGEDataPage() {
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
               <DivisionBox className='sm:-mb-2' style={{ color: checkMaxYears(dataOption) && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox
+                sx={{
+                  '&.Mui-checked': {
+                    color: "white",
+                  },
+                }}
                 disabled={!(checkMaxYears(dataOption) && checkData(filteredData))}
                 className='sm:-mb-2'
                 checked={isMaxYears}

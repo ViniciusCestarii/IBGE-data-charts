@@ -206,7 +206,7 @@ function IBGEDataPage() {
           renderInput={(params) => <TextField {...params} label="Dados" />}
         />
         <div className='flex flex-col sm:flex-row'>
-          <TooltipMUI title={`Percentual do total geral ${dataInfo[dataOption].percentage && checkData(filteredData) ? "" : "[ Desabilitado | esse tipo de dado não suporta ]"}`} placement='top'>
+          <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={`Percentual do total geral ${dataInfo[dataOption].percentage && checkData(filteredData) ? "" : "[ Desabilitado | esse tipo de dado não suporta ]"}`} placement='top'>
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
               <PercentBox className='sm:-mb-2' style={{ color: dataInfo[dataOption].percentage && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox
@@ -218,7 +218,7 @@ function IBGEDataPage() {
 
             </div>
           </TooltipMUI>
-          <TooltipMUI title={`Mostrar 1/4  dos dados ${checkMaxYears(dataOption) && checkData(filteredData) ? "" : '[ Desabilitado | há poucos dados ]'}`} placement='top'>
+          <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={`Mostrar 1/4  dos dados ${checkMaxYears(dataOption) && checkData(filteredData) ? "" : '[ Desabilitado | há poucos dados ]'}`} placement='top'>
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
               <DivisionBox className='sm:-mb-2' style={{ color: checkMaxYears(dataOption) && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox

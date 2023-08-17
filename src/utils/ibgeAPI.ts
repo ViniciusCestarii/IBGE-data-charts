@@ -33,8 +33,8 @@ export const dataInfo: {
   'Produção de Milho': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4888]' },
   'Produção de Soja': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4896]' },
   'Produção de Tomate': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1731/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/214?localidades=&classificacao=226[4899]' },
-  'Área dos estabelecimentos agropecuários utilizada para pastagem': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118269]' },
-  'Área dos estabelecimentos agropecuários utilizada para lavouras': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118268]' },
+  'Área dos estabelecimentos agropecuários utilizada para pastagem': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118269]', percentage:2339 },
+  'Área dos estabelecimentos agropecuários utilizada para lavouras': { type: 'Dados Agropecuários', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/1031/periodos/1940|1950|1960|1970|1975|1980|1985|1995|2006/variaveis/184?localidades=&classificacao=12777[118268]', percentage:2339 },
   'Índice de Gini': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/155/periodos/1991|2000/variaveis/95?localidades='},
   'Número total de brasileiros natos': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades=' },
   'Número de brasileiros natos com 80 anos ou mais': { type: 'Dados Demográficos', link: 'https://servicodados.ibge.gov.br/api/v3/agregados/617/periodos/1991|2000|2010/variaveis/289?localidades=&classificacao=58[2503]' },
@@ -112,7 +112,23 @@ export const getDadoIbgeByFullURL = async (url: string, location: string, locati
   url = url.replace("?localidades=", urlLocation)
 
   if(isPercentage){
+    if(isPercentage.toString().substring(0, 2) === "10"){
     url = url.replace("variaveis/", `variaveis/${isPercentage}`)
+    } else {
+      const startIndex = url.lastIndexOf("/variaveis/") + 11
+      const endIndex = url.indexOf("?", startIndex);
+
+      if (startIndex >= 11 && endIndex > startIndex) {
+        const numberString = url.substring(startIndex, endIndex);
+        const parsedNumber = parseInt(numberString);
+        
+        if (!isNaN(parsedNumber)) {
+          url = url.replace(`variaveis/${parsedNumber}`, `variaveis/${isPercentage}`)
+        } else {
+          console.error("Error parsing number:", numberString);
+        }
+      }
+    }
   }
   console.log(url)
 

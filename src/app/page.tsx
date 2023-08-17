@@ -143,6 +143,7 @@ function IBGEDataPage() {
                 },
               }}
             />)}
+          disableClearable
           disablePortal
           ListboxComponent={ListboxComponent}
           disableListWrap
@@ -194,6 +195,7 @@ function IBGEDataPage() {
                 <ul>{params.children}</ul>
               </li>)
           }}
+          disableClearable
           disablePortal
           value={dataOption}
           onChange={handleChangeDataOption}

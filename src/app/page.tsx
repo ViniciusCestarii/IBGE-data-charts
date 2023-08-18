@@ -14,8 +14,8 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd';
 import MathCompass from 'mdi-material-ui/MathCompass';
 import PercentBox from 'mdi-material-ui/PercentBox';
 import DivisionBox from 'mdi-material-ui/DivisionBox';
+import StarFourPointsBox from 'mdi-material-ui/StarFourPointsBox';
 import ListboxComponent from '@/components/Listbox';
-import CircleBox from 'mdi-material-ui/CircleBox';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
 
@@ -237,7 +237,7 @@ function IBGEDataPage() {
           </TooltipMUI>
           <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={`${isContrast ? 'Diminuir contraste' : 'Aumentar contraste'}`} placement='top'>
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
-              <CircleBox className='text-white' fontSize='medium' />
+              <StarFourPointsBox className='text-white' fontSize='medium' />
               <Checkbox
                 className={`${isContrast ? 'bg-gradient-to-br from-green-300 via-purple-500 to-orange-600' : ''}`}
                 checked={isContrast}

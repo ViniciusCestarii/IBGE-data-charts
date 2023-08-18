@@ -3,7 +3,7 @@ import { useState, useEffect, ReactNode } from 'react';
 import { getDadoIbgeByFullURL, dataReturn, createOptions, createChartData, dataInfo, getAllLocalities, getYearsFromUrl } from '../utils/ibgeAPI';
 import { Bar, Line, PolarArea, Scatter } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Title, Tooltip, Legend, RadialLinearScale, ArcElement } from 'chart.js';
-import { Autocomplete, Checkbox, CircularProgress, Popper, TextField, useTheme, Tooltip as TooltipMUI } from '@mui/material';
+import { Autocomplete, Checkbox, CircularProgress, Popper, TextField, useTheme, Tooltip as TooltipMUI, useMediaQuery } from '@mui/material';
 import CalendarBlank from 'mdi-material-ui/CalendarBlank';
 import Magnify from 'mdi-material-ui/Magnify';
 import MagnifyRemoveOutline from 'mdi-material-ui/MagnifyRemoveOutline';
@@ -17,6 +17,7 @@ import DivisionBox from 'mdi-material-ui/DivisionBox';
 import StarFourPointsBox from 'mdi-material-ui/StarFourPointsBox';
 import ListboxComponent from '@/components/Listbox';
 import Cancel from 'mdi-material-ui/Cancel';
+import GestureTap from 'mdi-material-ui/GestureTap';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
 
@@ -66,6 +67,8 @@ function IBGEDataPage() {
   const [isPercentage, setIsPercentage] = useState<boolean>(false);
   const [isMaxYears, setIsMaxYears] = useState<boolean>(false);
   const [isContrast, setIsContrast] = useState<boolean>(false);
+
+  const isBiggerThanLg = useMediaQuery(theme.breakpoints.up('lg'))
 
   const handleChangeIsContrast = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsContrast(event.target.checked);
@@ -217,11 +220,11 @@ function IBGEDataPage() {
         <div className='flex flex-col sm:flex-row'>
 
           <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={
-          <>
-            <div className='text-center'>Percentual do total geral</div>
-            <span className='text-[0.65rem] text-center'>{dataInfo[dataOption].percentage && checkData(filteredData) ? "" : <><Cancel className='white' fontSize='small'/> | esse tipo de dado não suporta</>}</span>
-          </>
-        } placement='top'>
+            <>
+              <div className='text-center'>Percentual do total geral</div>
+              <span className='text-[0.65rem] text-center'>{dataInfo[dataOption].percentage && checkData(filteredData) ? "" : <><Cancel className='white' fontSize='small' /> | esse tipo de dado não suporta</>}</span>
+            </>
+          } placement='top'>
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px] space-x-2 sm:space-x-0'>
               <PercentBox style={{ color: dataInfo[dataOption].percentage && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox
@@ -230,15 +233,15 @@ function IBGEDataPage() {
                 onChange={handleChangeIsPercentage}
               />
 
-            </div>        
+            </div>
           </TooltipMUI>
-          <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} 
-          title={
-          <>
-            <div className='text-center'>Mostrar 1/4  dos dado</div>
-            <span className='text-[0.65rem] text-center'>{checkMaxYears(dataOption) && checkData(filteredData) ? "" : <><Cancel className='white' fontSize='small'/> | há poucos dados</>}</span>
-          </>
-        } placement='top'>
+          <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000}
+            title={
+              <>
+                <div className='text-center'>Mostrar 1/4  dos dado</div>
+                <span className='text-[0.65rem] text-center'>{checkMaxYears(dataOption) && checkData(filteredData) ? "" : <><Cancel className='white' fontSize='small' /> | há poucos dados</>}</span>
+              </>
+            } placement='top'>
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px] space-x-2 sm:space-x-0'>
               <DivisionBox style={{ color: checkMaxYears(dataOption) && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox
@@ -282,7 +285,9 @@ function IBGEDataPage() {
             </div>
           </div>
           <div className='p-3 lg:p-0'>
-            <p className='text-xs opacity-60 text-center'>Arraste o mouse por cima dos gráficos para mais informação <CursorDefaultOutline fontSize='small' /> </p>
+            <p className='text-xs opacity-60 text-center'>{isBiggerThanLg
+              ? <>Arraste o mouse por cima dos gráficos para mais informação <CursorDefaultOutline fontSize='small' /></>
+              : <>Toque nos gráficos para mais informação <GestureTap fontSize='small' /></>} </p>
           </div>
         </>
       )}

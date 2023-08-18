@@ -16,6 +16,7 @@ import PercentBox from 'mdi-material-ui/PercentBox';
 import DivisionBox from 'mdi-material-ui/DivisionBox';
 import StarFourPointsBox from 'mdi-material-ui/StarFourPointsBox';
 import ListboxComponent from '@/components/Listbox';
+import Cancel from 'mdi-material-ui/Cancel';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
 
@@ -214,7 +215,13 @@ function IBGEDataPage() {
           renderInput={(params) => <TextField {...params} label="Dados" />}
         />
         <div className='flex flex-col sm:flex-row'>
-          <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={`Percentual do total geral ${dataInfo[dataOption].percentage && checkData(filteredData) ? "" : "[ Desabilitado | esse tipo de dado não suporta ]"}`} placement='top'>
+
+          <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={
+          <>
+            <div className='text-center'>Percentual do total geral</div>
+            <span className='text-[0.65rem] text-center'>{dataInfo[dataOption].percentage && checkData(filteredData) ? "" : <><Cancel className='white' fontSize='small'/> | esse tipo de dado não suporta</>}</span>
+          </>
+        } placement='top'>
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
               <PercentBox style={{ color: dataInfo[dataOption].percentage && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox
@@ -223,9 +230,15 @@ function IBGEDataPage() {
                 onChange={handleChangeIsPercentage}
               />
 
-            </div>
+            </div>        
           </TooltipMUI>
-          <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={`Mostrar 1/4  dos dados ${checkMaxYears(dataOption) && checkData(filteredData) ? "" : '[ Desabilitado | há poucos dados ]'}`} placement='top'>
+          <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} 
+          title={
+          <>
+            <div className='text-center'>Mostrar 1/4  dos dado</div>
+            <span className='text-[0.65rem] text-center'>{checkMaxYears(dataOption) && checkData(filteredData) ? "" : <><Cancel className='white' fontSize='small'/> | há poucos dados</>}</span>
+          </>
+        } placement='top'>
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
               <DivisionBox style={{ color: checkMaxYears(dataOption) && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox

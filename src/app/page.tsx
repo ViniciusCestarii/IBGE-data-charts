@@ -15,6 +15,7 @@ import MathCompass from 'mdi-material-ui/MathCompass';
 import PercentBox from 'mdi-material-ui/PercentBox';
 import DivisionBox from 'mdi-material-ui/DivisionBox';
 import ListboxComponent from '@/components/Listbox';
+import CircleBox from 'mdi-material-ui/CircleBox';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Title, Tooltip, Legend, BarElement, RadialLinearScale, ArcElement);
 
@@ -63,6 +64,11 @@ function IBGEDataPage() {
   const [location, setLocation] = useState<string>("Brasil")
   const [isPercentage, setIsPercentage] = useState<boolean>(false);
   const [isMaxYears, setIsMaxYears] = useState<boolean>(false);
+  const [isContrast, setIsContrast] = useState<boolean>(false);
+
+  const handleChangeIsContrast = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsContrast(event.target.checked);
+  };
 
   const handleChangeIsPercentage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsPercentage(event.target.checked);
@@ -210,15 +216,9 @@ function IBGEDataPage() {
         <div className='flex flex-col sm:flex-row'>
           <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={`Percentual do total geral ${dataInfo[dataOption].percentage && checkData(filteredData) ? "" : "[ Desabilitado | esse tipo de dado não suporta ]"}`} placement='top'>
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
-              <PercentBox className='sm:-mb-2' style={{ color: dataInfo[dataOption].percentage && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
+              <PercentBox style={{ color: dataInfo[dataOption].percentage && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox
-                sx={{
-                  '&.Mui-checked': {
-                    color: "white",
-                  },
-                }}
                 disabled={!(dataInfo[dataOption].percentage && checkData(filteredData))}
-                className='sm:-mb-2'
                 checked={isPercentage}
                 onChange={handleChangeIsPercentage}
               />
@@ -227,17 +227,21 @@ function IBGEDataPage() {
           </TooltipMUI>
           <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={`Mostrar 1/4  dos dados ${checkMaxYears(dataOption) && checkData(filteredData) ? "" : '[ Desabilitado | há poucos dados ]'}`} placement='top'>
             <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
-              <DivisionBox className='sm:-mb-2' style={{ color: checkMaxYears(dataOption) && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
+              <DivisionBox style={{ color: checkMaxYears(dataOption) && checkData(filteredData) ? 'white' : 'rgba(120, 120, 160, 0.7)' }} fontSize='medium' />
               <Checkbox
-                sx={{
-                  '&.Mui-checked': {
-                    color: "white",
-                  },
-                }}
                 disabled={!(checkMaxYears(dataOption) && checkData(filteredData))}
-                className='sm:-mb-2'
                 checked={isMaxYears}
                 onChange={handleChangeIsMaxYear}
+              />
+            </div>
+          </TooltipMUI>
+          <TooltipMUI enterTouchDelay={0} leaveTouchDelay={5000} title={`${isContrast ? 'Diminuir contraste' : 'Aumentar contraste'}`} placement='top'>
+            <div className='flex flex-row items-center justify-center w-full sm:w-auto sm:flex-col max-w-[340px]'>
+              <CircleBox className='text-white' fontSize='medium' />
+              <Checkbox
+                className={`${isContrast ? 'bg-gradient-to-br from-green-300 via-purple-500 to-orange-600' : ''}`}
+                checked={isContrast}
+                onChange={handleChangeIsContrast}
               />
             </div>
           </TooltipMUI>
@@ -252,16 +256,16 @@ function IBGEDataPage() {
           </div>
           <div className='max-w-[1300px] grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-center items-center w-full sm:h-auto gap-4 grid-rows-2'>
             <div className='flex justify-center items-center flex-col max-h-[432px]'>
-              <Line data={createChartData(filteredData)} options={createOptions(filteredData, true, true)} />
+              <Line data={createChartData(filteredData, isContrast)} options={createOptions(filteredData, true, true)} />
             </div>
             <div className='flex justify-center items-center max-h-[432px]'>
-              <Scatter data={createChartData(filteredData, true)} options={createOptions(filteredData, true, true)} />
+              <Scatter data={createChartData(filteredData, isContrast, true)} options={createOptions(filteredData, true, true)} />
             </div>
             <div className='lg:col-span-2 lg:row-span-2 flex justify-center items-center max-h-[564px]'>
-              <PolarArea data={createChartData(filteredData)} options={createOptions(filteredData)} />
+              <PolarArea data={createChartData(filteredData, isContrast)} options={createOptions(filteredData)} />
             </div>
             <div className='flex justify-center items-center col-span-1 lg:col-span-2 max-h-[432px]'>
-              <Bar data={createChartData(filteredData)} options={createOptions(filteredData, true, true)} />
+              <Bar data={createChartData(filteredData, isContrast)} options={createOptions(filteredData, true, true)} />
             </div>
           </div>
           <div className='p-3 lg:p-0'>

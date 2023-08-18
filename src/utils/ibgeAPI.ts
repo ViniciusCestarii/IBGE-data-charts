@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ChartOptions } from 'chart.js';
 
 const IBGE_API_BASE_URL = 'https://servicodados.ibge.gov.br/api/v1/';
 
@@ -135,7 +136,6 @@ export const getDadoIbgeByFullURL = async (url: string, location: string, locati
       }
     }
   }
-  console.log(url)
 
   try {
     const response = await axios.get(url);
@@ -153,81 +153,48 @@ export const getDadoIbgeByFullURL = async (url: string, location: string, locati
   }
 }
 
-export const createChartData = (data: dataReturn, axis?: boolean) => {
+export const createChartData = (data: dataReturn, contrast?:boolean,  axis?: boolean) => {
+  const colors = [
+    'rgba(60, 60, 80, 0.7)',    // Azul escuro
+    'rgba(90, 90, 120, 0.7)',   // Azul médio-escuro
+    'rgba(120, 120, 160, 0.7)', // Azul médio
+    'rgba(150, 150, 200, 0.7)', // Azul médio-claro
+    'rgba(180, 180, 240, 0.7)', // Azul claro
+  ]
+  const contrastColors = [
+    'rgba(135, 206, 235, 0.7)', // Azul Celeste
+    'rgba(255, 165, 0, 0.7)', // Laranja Intenso
+    'rgba(128, 0, 128, 0.7)', // Roxo Vibrante
+    'rgba(0, 255, 0, 0.7)',   // Verde Limão Neon
+    'rgba(0, 255, 255, 0.7)', // Ciano Elétrico
+    'rgba(255, 0, 255, 0.7)', // Magenta Brilhante
+    'rgba(255, 255, 0, 0.7)', // Amarelo Brilhante
+  ]
+  const choosedColors = contrast ? contrastColors : colors
   const chartData = {
     labels: data.data.map((item) => item.name),
     datasets: [
       {
         data: axis ? data.data.map((item, index) => { return { x: parseInt(item.name.substring(0, 5)), y: item.value } }) : data.data.map((item) => item.value),
-        pointBorderColor: "rgba(150, 150, 200, 0.7)",
-        pointBackgroundColor: "rgba(150, 150, 200, 0.7)",
+        pointBorderColor: choosedColors.slice(1),
+        pointBackgroundColor: choosedColors.slice(1),
         ticks: {
           color: "white",
         },
-        backgroundColor: [
-          'rgba(60, 60, 80, 0.7)',    // Azul escuro
-          'rgba(90, 90, 120, 0.7)',   // Azul médio-escuro
-          'rgba(120, 120, 160, 0.7)', // Azul médio
-          'rgba(150, 150, 200, 0.7)', // Azul médio-claro
-          'rgba(180, 180, 240, 0.7)', // Azul claro
-        ],
-        borderColor: [
-          'rgba(60, 60, 80, 0.7)',    // Azul escuro
-          'rgba(90, 90, 120, 0.7)',   // Azul médio-escuro
-          'rgba(120, 120, 160, 0.7)', // Azul médio
-          'rgba(150, 150, 200, 0.7)', // Azul médio-claro
-          'rgba(180, 180, 240, 0.7)', // Azul claro
-        ],
+        backgroundColor: choosedColors,
+        borderColor: choosedColors,
       }
     ]
   }
   return chartData
 }
 
-type ChartOptions = {
-  plugins: {
-    legend: {
-      display: boolean;
-    };
-    title: {
-      display: boolean;
-      text: string;
-      color: string;
-      font: {
-        size: number;
-      };
-    };
-  };
-  elements: {
-    line: {
-      tension: number;
-      borderWidth: number;
-      borderColor: string;
-      fill: string;
-      backgroundColor: string;
-    };
-    point: {
-      radius: number;
-      hitRadius: number;
-    };
-  };
-  scales: {
-    x?: {
-      ticks: {
-        color: string;
-      };
-    };
-    y?: {
-      ticks: {
-        color: string;
-      };
-    };
-  };
-};
-
-export const createOptions = (data: dataReturn, showY?: boolean, showX?: boolean) => {
+export const createOptions = (data: dataReturn, showY?: boolean, showX?: boolean): Object => {
   const options: ChartOptions = {
     plugins: {
+      colors: {
+        forceOverride: true
+      },
       legend: {
         display: false,
       },
@@ -237,8 +204,8 @@ export const createOptions = (data: dataReturn, showY?: boolean, showX?: boolean
         color: "white",
         font: {
           size: 18,
-        }
-      }
+        },
+      },
     },
     elements: {
       line: {
@@ -251,26 +218,31 @@ export const createOptions = (data: dataReturn, showY?: boolean, showX?: boolean
       point: {
         radius: 4,
         hitRadius: 4,
-
-      }
+      },
     },
-    scales: {
-    },
-  }
+    scales: {},
+  };
 
   if (showY) {
-    options.scales.y = {
-      ticks: {
-        color: "white",
-      }
-    }
+    options.scales = {
+      ...options.scales,
+      y: {
+        ticks: {
+          color: "white",
+        },
+      },
+    };
   }
   if (showX) {
-    options.scales.x = {
-      ticks: {
-        color: "white",
-      }
-    }
+    options.scales = {
+      ...options.scales,
+      x: {
+        ticks: {
+          color: "white",
+        },
+      },
+    };
   }
-  return options
-}
+
+  return options;
+};

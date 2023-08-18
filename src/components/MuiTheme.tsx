@@ -28,6 +28,16 @@ const theme = createTheme({
         },
       },
     },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          padding: '0.25rem',
+          "&.Mui-checked": {
+            color: '#FFF',
+          }
+        }
+      },
+    },
   },
 })
 

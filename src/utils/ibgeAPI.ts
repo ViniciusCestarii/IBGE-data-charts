@@ -160,13 +160,16 @@ export const createChartData = (data: dataReturn, contrast?:boolean,  axis?: boo
     'rgba(180, 180, 240, 0.7)', // Azul claro
   ]
   const contrastColors = [
-    'rgba(135, 206, 235, 0.7)', // Azul Celeste
-    'rgba(255, 165, 0, 0.7)', // Laranja Intenso
-    'rgba(128, 0, 128, 0.7)', // Roxo Vibrante
-    'rgba(0, 255, 0, 0.7)',   // Verde Limão Neon
-    'rgba(0, 255, 255, 0.7)', // Ciano Elétrico
-    'rgba(255, 0, 255, 0.7)', // Magenta Brilhante
-    'rgba(255, 255, 0, 0.7)', // Amarelo Brilhante
+    'rgba(0, 123, 255, 0.7)',   // Azul brilhante
+    'rgba(255, 159, 64, 0.7)',  // Laranja
+    'rgba(0, 206, 209, 0.7)',   // Turquesa
+    'rgba(46, 204, 113, 0.7)',  // Verde esmeralda
+    'rgba(255, 59, 48, 0.7)',   // Vermelho
+    'rgba(138, 43, 226, 0.7)',  // Roxo
+    'rgba(255, 99, 71, 0.7)',   // Vermelho mais claro
+    'rgba(255, 200, 87, 0.7)',  // Amarelo pálido
+    'rgba(70, 130, 180, 0.7)',  // Azul aço
+    'rgba(255, 140, 0, 0.7)',   // Laranja intenso
   ]
   const choosedColors = contrast ? contrastColors : colors
   const chartData = {

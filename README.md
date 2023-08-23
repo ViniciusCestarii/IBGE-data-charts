@@ -1,4 +1,4 @@
-## This is a web application which consumes the IBGE (Brazilian Institute of Geography and Statistics) api to show its data on charts 📊
+## IBGE data charts 📊
 
 In this application there are all the brazilian states and citys (over 5 thousands) and lots of data provided by IBGE api
 

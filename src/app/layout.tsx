@@ -1,7 +1,8 @@
-import MuiTheme from '@/components/MuiTheme'
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import MuiTheme from '@/components/MuiTheme';
+import { Analytics } from '@vercel/analytics/react';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,6 +25,7 @@ export default function RootLayout({
               <span className='ml-auto p-2 pr-4'>Desenvolvido por <a href='https://github.com/ViniciusCestarii' className='underline font-semibold ml-1' style={{color: 'rgba(180, 180, 240, 0.7)',}}>@ViniciusCestarii</a></span>
             </MuiTheme>
           </div>
+          <Analytics/>
         </body>
       </html>
   )
